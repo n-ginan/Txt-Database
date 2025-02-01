@@ -29,8 +29,9 @@ class Database:
         columns = columns[:-2]
         open(f"{table_name}.txt", "w").write(columns)
 
+    @staticmethod
     def write_values(table_name: str, **kwargs):
-        pass
+        table = Database.get_table(table_name)
 
     @staticmethod
     def create_database(db_name: str):
@@ -42,6 +43,11 @@ class Database:
         os.chdir(db_name)
 
     @staticmethod
+    def get_columns(table_name: str):
+        string_column = open(Database.get_table(table_name), "r").readline().rstrip()
+        return string_column.split(", ")
+
+    @staticmethod
     def get_table(table_name: str):
         return f"{table_name}.txt" if f"{table_name}.txt" in os.listdir() else "table does not exist"
 
@@ -51,7 +57,7 @@ class Database:
 
 if __name__ == "__main__":
     Database.use_database("this_db")
-    print(Database.create_columns("my_table", tite="tite_id autoincrement pk", hatdog="panglan text", edad="age int"))
+    print(Database.get_columns("my_table"))
     #print(Database.create_columns("testing", 
     #               tite="testing_id autoincrement pk", 
     #               hotdog="test_name text",
