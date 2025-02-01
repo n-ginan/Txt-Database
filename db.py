@@ -11,7 +11,8 @@ AUTOINCREMENT = "autoincrement"
 
 class Database:
 
-    _tables = []
+    __tables = []
+    __database = ""
 
     @staticmethod
     def create_table(table_name: str) -> str:
@@ -20,7 +21,7 @@ class Database:
         if not Database.has_table(table_name):
             os.chdir("database")
             open(f"{table_name}.txt", "w")
-            Database._tables.append(f"{table_name}.txt")
+            Database.__tables.append(f"{table_name}.txt")
             return "table successfully created"
         return "table already exists"
 
@@ -39,16 +40,28 @@ class Database:
     def write_values(table_name: str, **kwargs):
         pass
 
-    def get_table():
-        pass
+    @staticmethod
+    def create_database(db_name: str):
+        os.mkdir(db_name)
+        Database.__database = db_name
+
+    # Wont actually know if it worked, unless we actually created two or more database
+    @staticmethod
+    def use_database(db_name: str):
+        os.chdir(db_name)
+        return Database.__database   
+
+    @staticmethod
+    def get_table(table_name: str):
+        return f"{table_name}.txt" if f"{table_name}.txt" in os.listdir() else "table does not exist"
 
     @staticmethod
     def has_table(table_name: str):
-        return True if f"{table_name}.txt" in Database._tables else False
+        return True if f"{table_name}.txt" in Database.__tables else False
 
 if __name__ == "__main__":
-    Database.create_table("testing")
-    print(Database.create_columns("testing", 
-                   tite="testing_id autoincrement pk", 
-                   hotdog="test_name text",
-                   test_age="test_age int"))
+    Database.create_database("this_db")
+    #print(Database.create_columns("testing", 
+    #               tite="testing_id autoincrement pk", 
+    #               hotdog="test_name text",
+    #               test_age="test_age int"))
